@@ -1,0 +1,80 @@
+<html>
+<head>
+	<title>Trollo</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+	<div class="header">
+
+	</div>
+
+	<div class="project">
+
+		<div class="board">
+			<h2>Test Board 1</h2>
+			<button type="button" id="add-column">Add Column</button>
+			<div class="column-container" id="column-container">
+
+				
+			</div>
+		</div>
+
+	</div>
+
+
+	<div class="column" id="column-template">
+			<h3 class="column-header"></h3>
+			<div class="card-container">
+
+
+				
+			</div>
+
+			<div class="add-card-button">
+				<button type="button" class="add-card">Add Card</button>
+			</div>
+	</div>
+
+	
+	<div class="card" id="card-template" draggable="true">
+			<h4 class="card-name">card name</h4>
+			<p class="card-description">description</p>
+	</div>
+
+
+
+<div id="modal" class="modal">
+	<div class="form">
+		<form id="modal-form">
+			<label for="modal-text">Title:</label>
+			<input id="modal-text" name="modal-text" type="text">
+			<button type="submit">OK!</button>
+		</form>
+	</div>
+
+</div>
+
+<div id="card-modal" class="modal">
+	<div class="form">
+		<form id="card-form">
+
+			<input id="column-name" name="column-name" type="text">
+
+			<label for="card-name">Name:</label>
+			<input id="card-name" name="card-name" type="text">
+
+			<label for="card-description">Description:</label>
+			<input id="card-description" name="card-description" type="text">
+
+			<button type="submit">OK!</button>
+		</form>
+	</div>
+
+</div>
+
+
+
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
