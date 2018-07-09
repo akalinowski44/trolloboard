@@ -13,7 +13,7 @@
 
 		<div class="board">
 			<h1>Test Board 1</h1>
-			<button type="button" id="add-column">Add Column</button>
+			<button type="button" id="add-column">+ Add Column</button>
 			<div class="column-container" id="column-container">
 
 				
@@ -25,22 +25,20 @@
 
 	<div class="column" id="column-template">
 			<h2 class="column-header"></h2>
-			<div class="card-container">
-
-
-				
+			<button type="button" class="remove-column">X</button>
+			<div class="card-container">				
 			</div>
-
 			<div class="add-card-button">
-				<button type="button" class="add-card">Add card...</button>
+				<button type="button" class="add-card">+ Add card</button>
 			</div>
 	</div>
 
 	
 	<div class="card" id="card-template" draggable="true">
 			<h4 class="card-name">name</h4>
+			<button type="button" class="remove-card">X</button>
 			<p class="card-description">description</p>
-			<button type="button" class="remove-card">Remove</button>
+			
 	</div>
 
 

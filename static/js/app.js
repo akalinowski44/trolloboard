@@ -12,15 +12,6 @@
     let cards = [];
     let ids = [0];
 
-    form.addEventListener("submit", (event)=>{
-        event.preventDefault();
-        let columnName = event.target.elements["modal-text"];
-        columns.push(addColumn(columnName.value));
-        columnName.value = "";
-
-        modal.style.display = "none";
-        
-    });
 
     function cloneElement(id) {
         let template = document.getElementById(id);
@@ -42,10 +33,18 @@
 
         addCardButton.addEventListener("click", ()=>{
 
-            showCardModal(columnName);
+        showCardModal(columnName);
 
         });
+
+        let id = generateId();
+        columnNode.setAttribute("id", id);
+
+        let button = columnNode.getElementsByClassName("remove-column")[0];
+        button.setAttribute("data-id", id)
+
         let column = {
+            id: id,
             name: columnName,
             el: columnNode,
             cardContainer: cardContainer
@@ -54,6 +53,17 @@
         columnContainer.appendChild(columnNode);
         return column;
     }
+
+
+    form.addEventListener("submit", (event)=>{
+        event.preventDefault();
+        let columnName = event.target.elements["modal-text"];
+        columns.push(addColumn(columnName.value));
+        columnName.value = "";
+
+        modal.style.display = "none";
+        
+    });
 
     function showCardModal(columnName){
         cardModal.style.display = "block";
@@ -115,7 +125,6 @@
 
     function removeCard(id) {
         for (i = 0; i < cards.length; i++) {
-            console.log(cards[i].id, id);
             if (cards[i].id == id) {
                 cards.splice(i, 1);
                 let index = ids.indexOf(cards[i]);
@@ -123,9 +132,9 @@
 
 
                 let rmv = document.getElementById(id);
-                console.log(rmv.columnName);
                 parent = rmv.parentNode;
                 parent.removeChild(rmv);
+                return 0;
             }
         }
     }
@@ -134,6 +143,35 @@
         if (event.target.classList.contains('remove-card')) {
             console.log("remove-ok", event.target.dataset.id);
             removeCard(event.target.dataset.id);
+        }
+    });
+
+    function removeColumn(id) {
+        for (i = 0; i < columns.length; i++) {
+            if (columns[i].id == id) {
+                columnName = columns[i].name;
+
+                columns.splice(i, 1);
+                let index = ids.indexOf(columns[i]);
+                ids.splice(index, 1);
+                let col = document.getElementById(id);
+                parent = col.parentNode;
+                parent.removeChild(col);
+                
+            }
+        }
+        for (i = 0; i < cards.length; i++) {
+            console.log(columnName, cards[i].columnName);
+            if (cards[i].columnName === columnName) {
+                cards.splice(i, 1);
+            }
+        }
+    }
+
+    window.addEventListener("click", (event)=>{
+        if (event.target.classList.contains('remove-column')) {
+            console.log("remove-ok", event.target.dataset.id);
+            removeColumn(event.target.dataset.id);
         }
     });
 

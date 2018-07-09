@@ -1,3 +1,16 @@
+.board h1 {
+    display: inline;
+}
+
+#add-column {
+    background: transparent;
+    border: 0;
+    margin-left: 10px;
+}
+#add-column:hover {
+    background: #ddd;
+}
+
 .column-container {
     display: flex;
     justify-content: flex-start;
@@ -15,8 +28,31 @@
 }
 
 .column-header {
-    margin-top: 0;
+    margin: 3px;
+    text-align: center;
+    display: inline;
 }
+
+.remove-column, .remove-card {
+    background: transparent;
+    border: 0;
+    float: right;
+}
+
+.remove-column:hover {
+    background: #ddd;
+}
+
+.remove-card:hover {
+    background: pink;
+    border-top-right-radius: 5px;
+}
+
+.card-name {
+    display: inline;
+}
+
+
 
 .column:nth-child(2n+1) {
     background: #eee;
