@@ -34,23 +34,6 @@
         
     });
 
-
-    function addCardToColumn(card, columnName){
-        if (card.columnName) {
-            //remove from column
-        } else {
-            card.columnName = columnName;
-
-            for (let column of columns) {
-                console.log(column, column.name, columnName);
-                if (column.name === columnName) {
-                    console.log(columnName);
-                    column.cardContainer.appendChild(card.el);
-                }
-            }
-        }
-    }
-
     function showCardModal(columnName){
         cardModal.style.display = "block";
         cardForm.elements["column-name"].value = columnName;
@@ -79,8 +62,21 @@
         }
 
         addCardToColumn(card, columnName);
-        cards.push(card);
-        
+        cards.push(card);   
+    }
+
+    function addCardToColumn(card, columnName){
+        if (card.columnName) {
+            //remove from column
+        } else {
+            card.columnName = columnName;
+
+            for (let column of columns) {
+                if (column.name === columnName) {
+                    column.cardContainer.appendChild(card.el);
+                }
+            }
+        }
     }
 
     cardForm.addEventListener("submit", (event)=>{

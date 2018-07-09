@@ -1,15 +1,29 @@
 .column-container {
     display: flex;
-    align-items: stretch;
-    height: 100%;
+    justify-content: flex-start;
+    background: #ddd;
+    align-items: flex-start;
 }
 
 .column {
-    flex: 1 1 20%;
+    min-width: 150px;
+    flex: 0 1 auto;
+    border-radius: 5px;
+    margin: 5px;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.column-header {
+    margin-top: 0;
 }
 
 .column:nth-child(2n+1) {
     background: #eee;
+}
+
+.column:nth-child(2n) {
+    background: #fff;
 }
 
 .modal {
@@ -38,4 +52,22 @@
 
 .card {
     cursor: move;
+    background: #edd;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#column-template, #card-template {
+    display: none;
+}
+
+button.add-card {
+    border: 0;
+    background: transparent;
+    width: 100%;
+}
+
+button.add-card:hover {
+    background: #ded;
+    border-radius: 0 0 5px 5px;
 }
