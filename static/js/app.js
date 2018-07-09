@@ -84,6 +84,9 @@
 
         cardNode.setAttribute("id", id);
 
+        let button = cardNode.getElementsByClassName("remove-card")[0];
+        button.setAttribute("data-id", id)
+
         let card = {
             id: id,
             name: name,
@@ -112,16 +115,27 @@
 
     function removeCard(id) {
         for (i = 0; i < cards.length; i++) {
-            if (cards[i].id === id) {
+            console.log(cards[i].id, id);
+            if (cards[i].id == id) {
                 cards.splice(i, 1);
                 let index = ids.indexOf(cards[i]);
                 ids.splice(index, 1);
 
-                let rmv = document.getElementById(id)
-                document.removeChild(rmv);
+
+                let rmv = document.getElementById(id);
+                console.log(rmv.columnName);
+                parent = rmv.parentNode;
+                parent.removeChild(rmv);
             }
         }
     }
+
+    window.addEventListener("click", (event)=>{
+        if (event.target.classList.contains('remove-card')) {
+            console.log("remove-ok", event.target.dataset.id);
+            removeCard(event.target.dataset.id);
+        }
+    });
 
     addColumnButton.addEventListener("click", ()=>{
         modal.style.display = "block";
