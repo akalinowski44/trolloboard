@@ -71,3 +71,12 @@ button.add-card:hover {
     background: #ded;
     border-radius: 0 0 5px 5px;
 }
+
+input {
+    display: inline;
+}
+
+label {
+    display: block;
+    float: left;
+}

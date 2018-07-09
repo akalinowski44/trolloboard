@@ -40,6 +40,7 @@
 	<div class="card" id="card-template" draggable="true">
 			<h4 class="card-name">name</h4>
 			<p class="card-description">description</p>
+			<button type="button" class="remove-card">Remove</button>
 	</div>
 
 
@@ -59,11 +60,11 @@
 	<div class="form">
 		<form id="card-form">
 
-			<input id="column-name" name="column-name" type="text">
+			<input id="column-name" name="column-name" type="text" style="display: none">
 
 			<label for="card-name">Name:</label>
 			<input id="card-name" name="card-name" type="text">
-
+			<br>
 			<label for="card-description">Description:</label>
 			<input id="card-description" name="card-description" type="text">
 
