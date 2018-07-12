@@ -2,12 +2,12 @@
     display: inline;
 }
 
-#add-column {
+.add-column {
     background: transparent;
     border: 0;
     margin-left: 10px;
 }
-#add-column:hover {
+.add-column:hover {
     background: #ddd;
 }
 
@@ -33,14 +33,14 @@
     display: inline;
 }
 
-.remove-column, .remove-card {
+.remove-column, .remove-card, .remove-board {
     background: transparent;
     border: 0;
     float: right;
 }
 
 
-.remove-column:hover, .remove-card:hover {
+.remove-column:hover, .remove-card:hover, .remove-board:hover {
     background: pink;
     border-top-right-radius: 5px;
 }

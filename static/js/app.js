@@ -1,17 +1,13 @@
 (function() {
 
-
-    const modal = document.getElementById("modal");
-    const form = document.getElementById("modal-form");
-    const cardModal = document.getElementById("card-modal");
-    const cardForm = document.getElementById("card-form");
-
     const project = document.getElementById("project");
     const addBoardButton = document.getElementById("add-board");
     const boardModal = document.getElementById("board-modal");
     const boardForm = document.getElementById("board-form");
     const columnModal = document.getElementById("column-modal");
     const columnForm = document.getElementById("column-form");
+    const cardModal = document.getElementById("card-modal");
+    const cardForm = document.getElementById("card-form");
     
     let boards = [];
     let columns = [];
@@ -132,7 +128,6 @@
 
         let board = document.getElementById(boardId);
         let columnContainer = board.querySelector(".column-container");
-        console.log(columnContainer, boardId); 
         columnContainer.appendChild(columnNode);
         columns.push(column);
     }
@@ -189,43 +184,57 @@
     function removeCard(id) {
         for (i = 0; i < cards.length; i++) {
             if (cards[i].id == id) {
-                cards.splice(i, 1);
-                let index = ids.indexOf(cards[i]);
-                ids.splice(index, 1);
-
-
+                //usuwamy element HTML
                 let rmv = document.getElementById(id);
                 parent = rmv.parentNode;
                 parent.removeChild(rmv);
-                return 0;
+                //usuwamy kartę z tablicy kart
+                cards.splice(i, 1);
+                //usuwamy id karty z listy zajętych id
+                let index = ids.indexOf(cards[i]);
+                ids.splice(index, 1);
+                console.log("Card removed successfully! ID:", id);
+                return;
             }
         }
     }
 
     window.addEventListener("click", (event)=>{
         if (event.target.classList.contains('remove-card')) {
-            console.log("remove-ok", event.target.dataset.id);
+            
             removeCard(event.target.dataset.id);
         }
     });
 
+    function removeCardsFromColumn(columnId) {
+        for (i = 0; i < cards.length; i++) {
+            if (cards[i].columnId == columnId) {
+                removeCard(cards[i].id)
+                i--;
+            }
+        }
+    }
+
     function removeColumn(id) {
         for (i = 0; i < columns.length; i++) {
             if (columns[i].id == id) {
-                columnName = columns[i].name;
-
+                //usuwamy wszystkie karty z tej kolumny
+                removeCardsFromColumn(id);
+                //usuwamy kolumnę z tablicy kolumn
                 columns.splice(i, 1);
+                //usuwamy id kolumny z listy zajętych id
                 let index = ids.indexOf(columns[i]);
                 ids.splice(index, 1);
+                //usuwamy element HTML
                 let col = document.getElementById(id);
                 parent = col.parentNode;
                 parent.removeChild(col);
+                console.log("Column removed successfully! ID:", id);
                 
             }
         }
         for (i = 0; i < cards.length; i++) {
-            console.log(columnName, cards[i].columnName);
-            if (cards[i].columnName === columnName) {
+            if (cards[i].columnId === id) {
                 cards.splice(i, 1);
             }
         }
@@ -233,7 +242,6 @@
 
     window.addEventListener("click", (event)=>{
         if (event.target.classList.contains('remove-column')) {
-            console.log("remove-ok", event.target.dataset.id);
             removeColumn(event.target.dataset.id);
         }
     });
@@ -275,7 +283,7 @@
 
     localStorage.setItem('tekst', 'costamcostam');
     localStorage.setItem('tab', [1,2,3,4]);
-    console.log(localStorage.getItem('tekst'), localStorage.getItem('tab'));
+//    console.log(localStorage.getItem('tekst'), localStorage.getItem('tab'));
     
     
 })();
