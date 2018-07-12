@@ -23,7 +23,7 @@
     flex: 0 1 auto;
     border-radius: 5px;
     margin: 5px;
-    padding-bottom: 30px;
+    padding-bottom: 45px;
     padding-top: 0;
     position: relative;
 }
@@ -83,6 +83,10 @@
     border-radius: 5px;
     margin: 5px;
 
+}
+
+.card-container {
+    padding-bottom: 50px;
 }
 
 #column-template, #card-template, #board-template {

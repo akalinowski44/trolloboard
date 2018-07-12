@@ -294,13 +294,16 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
+    console.log("dragged card's id:", ev.target.id);
 }
 
 function drop(ev) {
     ev.preventDefault();
-    let data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+    let cardId = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(cardId));
+
     let columnId = ev.target.parentElement.id;
-    console.log(columnId);
+    console.log("dropped column's id:", columnId);
+    //changeCardOwner(cardId, columnId); //to trzeba napisać
     
 }
