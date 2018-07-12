@@ -8,17 +8,17 @@
     const columnForm = document.getElementById("column-form");
     const cardModal = document.getElementById("card-modal");
     const cardForm = document.getElementById("card-form");
-    
-    let boards = [];
-    let columns = [];
-    let cards = [];
-    let ids = [0];
+
 
     let initialState = {
-        boards: [],
-        columns: [],
-        cards: [],
-        ids: [0]
+        boards: [{id: 1, name: "Test Board"}],
+        columns: [{id: 2, name: "To do", boardId: 1},
+                  {id: 3, name: "Doing", boardId: 1},
+                  {id: 4, name: "Done", boardId: 1}],
+        cards: [{id: 5, name: "Task 1", description: "Description", columnId: 2},
+                {id: 6, name: "Task 2", description: "Description", columnId: 3},
+                {id: 7, name: "Task 3", description: "Description", columnId: 4}],
+        ids: [0,1,2,3,4,5,6,7]
     }
 
     let state = loadData();
@@ -52,7 +52,6 @@
             id: id,
             name: boardName
         }
-        console.log(boardName);
         addBoard(board);
         boardName.value = "";
         boardModal.style.display = "none";
@@ -69,8 +68,14 @@
 
         let addColumnButton = boardNode.querySelector(".add-column");
 
+        let hideBoardButton = boardNode.querySelector(".hide-board");
+
         addColumnButton.addEventListener("click", ()=>{
             showColumnModal(board.id);
+        });
+
+        hideBoardButton.addEventListener("click", ()=>{
+            changeVisibility(board.id);
         });
         
         boardNode.setAttribute("id", board.id);
@@ -80,6 +85,17 @@
 
         project.appendChild(boardNode);
         
+    }
+
+    function changeVisibility(boardId) {
+        let board = document.getElementById(boardId);
+        let columnContainer = board.querySelector(".column-container");
+
+        if (columnContainer.style.display == "none") {
+            columnContainer.style.display = "flex";
+        } else {
+            columnContainer.style.display = "none";
+        }
     }
 
     function showColumnModal(boardId){
@@ -152,25 +168,9 @@
         event.preventDefault();
         let name = event.target.elements["card-name"].value;
         let description = event.target.elements["card-description"].value;
-        let columnName = event.target.elements["column-id"].value;
-        addCard(name, description, columnName);
-        cardModal.style.display = "none";
-    });
-
-    function addCard(name, description, columnId) {
-        let cardNode = cloneElement("card-template");
-        let cardName = cardNode.querySelector(".card-name");
-        let cardDescription = cardNode.querySelector(".card-description");
-
-        cardName.innerText = name;
-        cardDescription.innerText = description;
+        let columnId = event.target.elements["column-id"].value;
 
         let id = generateId();
-
-        cardNode.setAttribute("id", id);
-
-        let button = cardNode.getElementsByClassName("remove-card")[0];
-        button.setAttribute("data-id", id)
 
         let card = {
             id: id,
@@ -179,19 +179,36 @@
             columnId: columnId,
         }
 
-        let column = document.getElementById(columnId);
+        addCard(card);
+        state.cards.push(card);   
+        updateDatabase(state);
+        cardModal.style.display = "none";
+    });
+
+    function addCard(card) {
+        let cardNode = cloneElement("card-template");
+        let cardName = cardNode.querySelector(".card-name");
+        let cardDescription = cardNode.querySelector(".card-description");
+
+        cardName.innerText = card.name;
+        cardDescription.innerText = card.description;
+
+        cardNode.setAttribute("id", card.id);
+
+        let button = cardNode.getElementsByClassName("remove-card")[0];
+        button.setAttribute("data-id", card.id)
+
+        let column = document.getElementById(card.columnId);
         let cardContainer = column.querySelector(".card-container");
         cardContainer.appendChild(cardNode);
-        state.cards.push(card);   
+        
     }
 
     function removeCard(id) {
-        for (i = 0; i < state.cards.length; i++) {
+        for (let i = 0; i < state.cards.length; i++) {
             if (state.cards[i].id == id) {
-                console.log(state.cards[i].id, id)
                 //usuwamy element HTML
                 let rmv = document.getElementById(id);
-                console.log(rmv);
                 parent = rmv.parentNode;
                 parent.removeChild(rmv);
                 //usuwamy kartę z tablicy kart
@@ -200,6 +217,7 @@
                 let index = state.ids.indexOf(state.cards[i]);
                 state.ids.splice(index, 1);
                 console.log("Card removed successfully! ID:", id);
+                updateDatabase(state);
                 return;
             }
         }
@@ -213,7 +231,7 @@
     });
 
     function removeCardsFromColumn(columnId) {
-        for (i = 0; i < state.cards.length; i++) {
+        for (let i = 0; i < state.cards.length; i++) {
             if (state.cards[i].columnId == columnId) {
                 removeCard(state.cards[i].id);
                 i--;    //po usunięciu karty, następnik przyjmuje jej index w tablicy, należy więc cofnąć iterator
@@ -222,25 +240,25 @@
     }
 
     function removeColumn(id) {
-        for (i = 0; i < state.columns.length; i++) {
+        for (let i = 0; i < state.columns.length; i++) {
             if (state.columns[i].id == id) {
-                console.log(state.columns[i].id, id)
                 //usuwamy wszystkie karty z tej kolumny
                 removeCardsFromColumn(id);
-                //usuwamy kolumnę z tablicy kolumn
-                state.columns.splice(i, 1);
                 //usuwamy id kolumny z listy zajętych id
                 let index = state.ids.indexOf(state.columns[i]);
                 state.ids.splice(index, 1);
+                //usuwamy kolumnę z tablicy kolumn
+                state.columns.splice(i, 1);
                 //usuwamy element HTML
                 let col = document.getElementById(id);
                 parent = col.parentNode;
                 parent.removeChild(col);
+                updateDatabase(state);
                 console.log("Column removed successfully! ID:", id);
                 
             }
         }
-        for (i = 0; i < state.cards.length; i++) {
+        for (let i = 0; i < state.cards.length; i++) {
             if (state.cards[i].columnId === id) {
                 state.cards.splice(i, 1);
             }
@@ -255,7 +273,7 @@
 
 
     function removeColumnsFromBoard(boardId){
-        for (i = 0; i < state.columns.length; i++) {
+        for (let i = 0; i < state.columns.length; i++) {
             if (state.columns[i].boardId == boardId) {
                 removeColumn(state.columns[i].id);
                 i--; //patrz removeCardsFromColumn
@@ -264,19 +282,20 @@
     }
 
     function removeBoard(id) {
-        for (i = 0; i < state.boards.length; i++) {
+        for (let i = 0; i < state.boards.length; i++) {
             if (state.boards[i].id == id) {
                 //usuwamy wszystkie kolumny z tej tablicy
                 removeColumnsFromBoard(id);
-                //usuwamy tablicę z tablicy tablic XDDDDDD
-                state.boards.splice(i, 1);
                 //usuwamy id tablicy z listy zajętych id
                 let index = state.ids.indexOf(state.boards[i]);
                 state.ids.splice(index, 1);
+                //usuwamy tablicę z tablicy tablic XDDDDDD
+                state.boards.splice(i, 1);
                 //usuwamy element HTML
                 let brd = document.getElementById(id);
                 parent = brd.parentNode;
                 parent.removeChild(brd);
+                updateDatabase(state);
                 console.log("Board removed successfully! ID:", id);
 
             }
@@ -323,6 +342,9 @@
         for (let column of state.columns) {
             addColumn(column);
         }
+        for (let card of state.cards) {
+            addCard(card);
+        }
         return state;
     }
 
@@ -337,7 +359,12 @@
 
     
     function changeCardOwner(cardId, columnId) {
+        for (let card of state.cards) {
+            if (card.id == cardId) {
+                card.columnId = columnId;
+            }
 
+        }
     }
     
     window.allowDrop = function(ev) {
@@ -357,7 +384,8 @@
         let columnId = ev.target.parentElement.id;
 
         console.log("dropped column's id:", columnId);
-        //changeCardOwner(cardId, columnId); //to trzeba napisać
+        changeCardOwner(cardId, columnId); 
+        updateDatabase(state);
         
     }
 

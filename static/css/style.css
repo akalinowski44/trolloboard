@@ -41,7 +41,7 @@ body {
 }
 
 .column-container {
-    display: flex;
+    display: none;
     justify-content: flex-start;
     background: #ddd;
     align-items: flex-start;
@@ -64,18 +64,21 @@ body {
     display: inline;
 }
 
-.remove-column, .remove-card, .remove-board {
+.remove-column, .remove-card, .remove-board, .hide-board {
     background: transparent;
     border: 0;
     float: right;
 }
 
-.remove-board {
+.hide-board:hover {
+    background: rgb(230, 213, 82);
+}
+
+.buttons {
     position: absolute;
     top: 0;
     right: 0;
 }
-
 
 .remove-column:hover, .remove-card:hover, .remove-board:hover {
     background: pink;
