@@ -78,8 +78,12 @@ body {
     position: absolute;
     top: 0;
     right: 0;
+    font-size: 24px;
 }
 
+.buttons .remove-board, .hide-board {
+    font-size: inherit;
+}
 .remove-column:hover, .remove-card:hover, .remove-board:hover {
     background: pink;
     border-top-right-radius: 5px;

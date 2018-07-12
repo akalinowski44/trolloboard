@@ -40,7 +40,7 @@
 		</div>
 </div>
 
-<div class="card" id="card-template" draggable="true" ondragstart="drag(event)">
+<div class="card" id="card-template" draggable="true" ondragstart="drag(event)" ondrop="event.stopPropagation();"> 
 		<h4 class="card-name"></h4>
 		<button type="button" class="remove-card">X</button>
 		<p class="card-description"></p>
