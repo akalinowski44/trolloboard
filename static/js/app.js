@@ -280,14 +280,7 @@
         if (event.target.classList.contains('remove-board')) {
             removeBoard(event.target.dataset.id);
         }
-    });
-
- /*   addColumnButton.addEventListener("click", ()=>{
-        modal.style.display = "block";
-        const inputTitle = document.getElementById("modal-text");
-        inputTitle.focus();
-    });*/
-    
+    });    
 
     window.addEventListener("click", (event)=>{
         if (event.target == boardModal) {
@@ -312,11 +305,6 @@
         }
     }
 
-    
-
-
-
-
     localStorage.setItem('tekst', 'costamcostam');
     localStorage.setItem('tab', [1,2,3,4]);
 //    console.log(localStorage.getItem('tekst'), localStorage.getItem('tab'));
@@ -339,6 +327,7 @@ function drop(ev) {
     ev.target.appendChild(document.getElementById(cardId));
 
     let columnId = ev.target.parentElement.id;
+
     console.log("dropped column's id:", columnId);
     //changeCardOwner(cardId, columnId); //to trzeba napisać
     

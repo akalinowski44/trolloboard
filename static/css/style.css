@@ -1,5 +1,32 @@
+body {
+    background: rgb(112, 109, 109);
+}
+
+.primary-button {
+    background: #eee;
+    border: 0;
+    border-radius: 5px;
+    color: black;
+    width: 120px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.primary-button:hover {
+    background: lightskyblue;
+}
+
 .board h1, .card-name {
     display: inline;
+}
+
+.board {
+    background: rgb(182, 182, 182);
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 15px;
+    padding: 15px;
+    position: relative;
 }
 
 .add-column {
@@ -9,21 +36,24 @@
 }
 .add-column:hover {
     background: #ddd;
+    border-radius: 5px;
 }
 
 .column-container {
     display: flex;
     justify-content: flex-start;
     background: #ddd;
-    align-items: stretch;
+    align-items: flex-start;
+    border-radius: 5px;
 }
 
 .column {
+    background: #eee;
     min-width: 300px;
     flex: 0 1 auto;
     border-radius: 5px;
     margin: 5px;
-    padding-bottom: 45px;
+    padding-bottom: 20px;
     padding-top: 0;
     position: relative;
 }
@@ -39,19 +69,26 @@
     float: right;
 }
 
+.remove-board {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 
 .remove-column:hover, .remove-card:hover, .remove-board:hover {
     background: pink;
     border-top-right-radius: 5px;
 }
 
-.column:nth-child(2n+1) {
-    background: #eee;
+button.add-card: {
+    border: 0;
+    background: transparent;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
-.column:nth-child(2n) {
-    background: #fff;
-}
 
 .modal {
     height: 100%;
@@ -79,14 +116,14 @@
 
 .card {
     cursor: move;
-    background: #edd;
+    background: #ddc;
     border-radius: 5px;
     margin: 5px;
 
 }
 
 .card-container {
-    padding-bottom: 50px;
+    padding: 5px 5px 50px 5px;
 }
 
 #column-template, #card-template, #board-template {
@@ -102,9 +139,11 @@ button.add-card {
 }
 
 button.add-card:hover {
-    background: #ded;
+    background: rgb(255, 255, 255);
     border-radius: 0 0 5px 5px;
 }
+
+
 
 input {
     display: inline;
