@@ -30,12 +30,13 @@ body {
 }
 
 .add-column {
-    background: transparent;
+    background: #ddd;
     border: 0;
     margin-left: 10px;
+    border-radius: 5px;
 }
 .add-column:hover {
-    background: #ddd;
+    background: lightskyblue;
     border-radius: 5px;
 }
 
@@ -49,7 +50,7 @@ body {
 
 .column {
     background: #eee;
-    min-width: 300px;
+    min-width: 200px;
     flex: 0 1 auto;
     border-radius: 5px;
     margin: 5px;
