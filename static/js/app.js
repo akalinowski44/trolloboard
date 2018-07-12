@@ -14,6 +14,15 @@
     let cards = [];
     let ids = [0];
 
+    let initialState = {
+        boards: [],
+        columns: [],
+        cards: [],
+        ids: [0]
+    }
+
+    let state = loadData();
+
 
     function cloneElement(id) {
         let template = document.getElementById(id);
@@ -35,44 +44,42 @@
 
     boardForm.addEventListener("submit", ()=>{
         event.preventDefault();
-        let boardName = event.target.elements["board-name"];
-        addBoard(boardName.value);
+        let boardName = event.target.elements["board-name"].value;
+
+        let id = generateId();
+
+        let board = {
+            id: id,
+            name: boardName
+        }
+        console.log(boardName);
+        addBoard(board);
         boardName.value = "";
         boardModal.style.display = "none";
+        state.boards.push(board);
+        updateDatabase(state);
     });
 
 
-    function addBoard(boardName) {
+    function addBoard(board) {
         let boardNode = cloneElement("board-template");
-
-        let id = generateId();
         
         let boardHeader = boardNode.querySelector(".board-header");
-        boardHeader.innerText = boardName;
+        boardHeader.innerText = board.name;
 
         let addColumnButton = boardNode.querySelector(".add-column");
 
         addColumnButton.addEventListener("click", ()=>{
-            showColumnModal(id);
+            showColumnModal(board.id);
         });
-
         
-        boardNode.setAttribute("id", id);
+        boardNode.setAttribute("id", board.id);
 
         let button = boardNode.querySelector(".remove-board");
-        button.setAttribute("data-id", id);
+        button.setAttribute("data-id", board.id);
 
-        let columnContainer = boardNode.querySelector(".column-container");
-
-        let board = {
-            id: id,
-            name: boardName,
-            el: boardNode,
-            columnContainer: columnContainer
-        }
-
-        boards.push(board);
         project.appendChild(boardNode);
+        
     }
 
     function showColumnModal(boardId){
@@ -86,21 +93,31 @@
         event.preventDefault();
         let boardId = event.target.elements["board-id"].value;
         let columnName = event.target.elements["column-name"].value;
-        addColumn(columnName, boardId);
+
+        let id = generateId();
+
+        let column = {
+            id: id,
+            name: columnName,
+            boardId: boardId
+        };
+
+        addColumn(column);
+        state.columns.push(column);
+        updateDatabase(state);
+
         columnName.value = "";
         columnModal.style.display = "none";
     });
 
 
 
-    function addColumn(columnName, boardId) {
+    function addColumn(column) {
         
-        let columnNode = cloneElement("column-template");
-
-        let id = generateId();
+        let columnNode = cloneElement("column-template");        
 
         let columnHeader = columnNode.querySelector(".column-header");
-        columnHeader.innerText = columnName;
+        columnHeader.innerText = column.name;
         
         let cardContainer = columnNode.querySelector(".card-container");
 
@@ -108,28 +125,19 @@
 
         addCardButton.addEventListener("click", ()=>{
 
-            showCardModal(id);
+            showCardModal(column.id);
 
         });
-
         
-        columnNode.setAttribute("id", id);
+        columnNode.setAttribute("id", column.id);
 
         let button = columnNode.querySelector(".remove-column");
-        button.setAttribute("data-id", id);
+        button.setAttribute("data-id", column.id);
 
-        let column = {
-            id: id,
-            name: columnName,
-            el: columnNode,
-            cardContainer: cardContainer,
-            boardId: boardId
-        };
-
-        let board = document.getElementById(boardId);
+        let board = document.getElementById(column.boardId);
         let columnContainer = board.querySelector(".column-container");
         columnContainer.appendChild(columnNode);
-        columns.push(column);
+        
     }
 
     function showCardModal(columnId){
@@ -169,30 +177,28 @@
             name: name,
             description: description,
             columnId: columnId,
-            el: cardNode
         }
 
         let column = document.getElementById(columnId);
         let cardContainer = column.querySelector(".card-container");
         cardContainer.appendChild(cardNode);
-        cards.push(card);   
+        state.cards.push(card);   
     }
 
-
-
-
     function removeCard(id) {
-        for (i = 0; i < cards.length; i++) {
-            if (cards[i].id == id) {
+        for (i = 0; i < state.cards.length; i++) {
+            if (state.cards[i].id == id) {
+                console.log(state.cards[i].id, id)
                 //usuwamy element HTML
                 let rmv = document.getElementById(id);
+                console.log(rmv);
                 parent = rmv.parentNode;
                 parent.removeChild(rmv);
                 //usuwamy kartę z tablicy kart
-                cards.splice(i, 1);
+                state.cards.splice(i, 1);
                 //usuwamy id karty z listy zajętych id
-                let index = ids.indexOf(cards[i]);
-                ids.splice(index, 1);
+                let index = state.ids.indexOf(state.cards[i]);
+                state.ids.splice(index, 1);
                 console.log("Card removed successfully! ID:", id);
                 return;
             }
@@ -207,24 +213,25 @@
     });
 
     function removeCardsFromColumn(columnId) {
-        for (i = 0; i < cards.length; i++) {
-            if (cards[i].columnId == columnId) {
-                removeCard(cards[i].id);
+        for (i = 0; i < state.cards.length; i++) {
+            if (state.cards[i].columnId == columnId) {
+                removeCard(state.cards[i].id);
                 i--;    //po usunięciu karty, następnik przyjmuje jej index w tablicy, należy więc cofnąć iterator
             }
         }
     }
 
     function removeColumn(id) {
-        for (i = 0; i < columns.length; i++) {
-            if (columns[i].id == id) {
+        for (i = 0; i < state.columns.length; i++) {
+            if (state.columns[i].id == id) {
+                console.log(state.columns[i].id, id)
                 //usuwamy wszystkie karty z tej kolumny
                 removeCardsFromColumn(id);
                 //usuwamy kolumnę z tablicy kolumn
-                columns.splice(i, 1);
+                state.columns.splice(i, 1);
                 //usuwamy id kolumny z listy zajętych id
-                let index = ids.indexOf(columns[i]);
-                ids.splice(index, 1);
+                let index = state.ids.indexOf(state.columns[i]);
+                state.ids.splice(index, 1);
                 //usuwamy element HTML
                 let col = document.getElementById(id);
                 parent = col.parentNode;
@@ -233,9 +240,9 @@
                 
             }
         }
-        for (i = 0; i < cards.length; i++) {
-            if (cards[i].columnId === id) {
-                cards.splice(i, 1);
+        for (i = 0; i < state.cards.length; i++) {
+            if (state.cards[i].columnId === id) {
+                state.cards.splice(i, 1);
             }
         }
     }
@@ -248,24 +255,24 @@
 
 
     function removeColumnsFromBoard(boardId){
-        for (i = 0; i < columns.length; i++) {
-            if (columns[i].boardId == boardId) {
-                removeColumn(columns[i].id);
+        for (i = 0; i < state.columns.length; i++) {
+            if (state.columns[i].boardId == boardId) {
+                removeColumn(state.columns[i].id);
                 i--; //patrz removeCardsFromColumn
             }
         }
     }
 
     function removeBoard(id) {
-        for (i = 0; i < boards.length; i++) {
-            if (boards[i].id == id) {
+        for (i = 0; i < state.boards.length; i++) {
+            if (state.boards[i].id == id) {
                 //usuwamy wszystkie kolumny z tej tablicy
                 removeColumnsFromBoard(id);
                 //usuwamy tablicę z tablicy tablic XDDDDDD
-                boards.splice(i, 1);
+                state.boards.splice(i, 1);
                 //usuwamy id tablicy z listy zajętych id
-                let index = ids.indexOf(boards[i]);
-                ids.splice(index, 1);
+                let index = state.ids.indexOf(state.boards[i]);
+                state.ids.splice(index, 1);
                 //usuwamy element HTML
                 let brd = document.getElementById(id);
                 parent = brd.parentNode;
@@ -294,41 +301,66 @@
     });
 
     function generateId() {
-        if (ids) {
-            let last = ids[ids.length-1];
+        if (state.ids) {
+            let last = state.ids[state.ids.length-1];
             let newId = last + 1;
-            ids.push(newId);
+            state.ids.push(newId);
             return newId;
         } else {
-            ids.push(1);
+            state.ids.push(1);
             return 1;
         }
     }
 
-    localStorage.setItem('tekst', 'costamcostam');
-    localStorage.setItem('tab', [1,2,3,4]);
-//    console.log(localStorage.getItem('tekst'), localStorage.getItem('tab'));
+    function loadData() {
+
+        let state = getDatabase('state');
+
+        for (let board of state.boards) {
+            addBoard(board);
+        }
+
+        for (let column of state.columns) {
+            addColumn(column);
+        }
+        return state;
+    }
+
+    function updateDatabase(state) {
+        localStorage.setItem('state', JSON.stringify(state));
+    }
+
+    function getDatabase(key) {
+        let state = localStorage.getItem(key);
+        return JSON.parse(state) || initialState;
+    }
+
     
+    function changeCardOwner(cardId, columnId) {
+
+    }
     
+    window.allowDrop = function(ev) {
+        ev.preventDefault();
+    }
+
+    window.drag = function(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+        console.log("dragged card's id:", ev.target.id);
+    }
+
+    window.drop = function(ev) {
+        ev.preventDefault();
+        let cardId = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(cardId));
+
+        let columnId = ev.target.parentElement.id;
+
+        console.log("dropped column's id:", columnId);
+        //changeCardOwner(cardId, columnId); //to trzeba napisać
+        
+    }
+
+    
+
 })();
-
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-    console.log("dragged card's id:", ev.target.id);
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    let cardId = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(cardId));
-
-    let columnId = ev.target.parentElement.id;
-
-    console.log("dropped column's id:", columnId);
-    //changeCardOwner(cardId, columnId); //to trzeba napisać
-    
-}
