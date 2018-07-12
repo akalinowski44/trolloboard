@@ -5,75 +5,89 @@
 </head>
 <body>
 
-	<div class="header">
-
-	</div>
-
-	<div class="project">
-
-		<div class="board">
-			<h1>Test Board 1</h1>
-			<button type="button" id="add-column">+ Add Column</button>
-			<div class="column-container" id="column-container">
-
-				
-			</div>
+	<div class="project" id="project">
+		<div id="header">
+			<button type="button" id="add-board">Add board</button>
 		</div>
-
+		
 	</div>
-
-
-	<div class="column" id="column-template">
-			<h2 class="column-header"></h2>
-			<button type="button" class="remove-column">X</button>
-			<div class="card-container">				
-			</div>
-			<div class="add-card-button">
-				<button type="button" class="add-card">+ Add card</button>
-			</div>
-	</div>
-
-	
-	<div class="card" id="card-template" draggable="true">
-			<h4 class="card-name">name</h4>
-			<button type="button" class="remove-card">X</button>
-			<p class="card-description">description</p>
-			
-	</div>
-
-
-
-<div id="modal" class="modal">
-	<div class="form">
-		<form id="modal-form">
-			<label for="modal-text">Title:</label>
-			<input id="modal-text" name="modal-text" type="text">
-			<button type="submit">OK!</button>
-		</form>
-	</div>
-
-</div>
-
-<div id="card-modal" class="modal">
-	<div class="form">
-		<form id="card-form">
-
-			<input id="column-name" name="column-name" type="text" style="display: none">
-
-			<label for="card-name">Name:</label>
-			<input id="card-name" name="card-name" type="text">
-			<br>
-			<label for="card-description">Description:</label>
-			<input id="card-description" name="card-description" type="text">
-
-			<button type="submit">OK!</button>
-		</form>
-	</div>
-
-</div>
-
-
 
 <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </body>
+
+
+<!-- ******TEMPLATES****** -->
+
+<div class="board" id="board-template">
+		<h1 class="board-header"></h1>
+		<button type="button" class="remove-board">X</button>
+		<button type="button" class="add-column">+ Add Column</button>
+		<div class="column-container">
+		</div>
+</div>
+
+<div class="column" id="column-template" ondrop="drop(event)" ondragover="allowDrop(event)">
+		<h2 class="column-header"></h2>
+		<button type="button" class="remove-column">X</button>
+		<div class="card-container">				
+		</div>
+		<div class="add-card-button">
+			<button type="button" class="add-card">+ Add card</button>
+		</div>
+</div>
+
+<div class="card" id="card-template" draggable="true" ondragstart="drag(event)">
+		<h4 class="card-name"></h4>
+		<button type="button" class="remove-card">X</button>
+		<p class="card-description"></p>
+</div>
+
+<div class="modal" id="modal">
+	<div class="form">
+		<form id="modal-form">
+			<label for="modal-text">Title:</label>
+			<input id="modal-text" name="modal-text" type="text" maxlength="15" required>
+			<button type="submit">OK!</button>
+		</form>
+	</div>
+</div>
+
+<div class="modal" id="board-modal">
+	<div class="form">
+		<form id="board-form">
+			<label for="board-name">Board name:</label>
+			<input id="board-name" name="board-name" type="text" maxlength="15" required>
+			<button type="submit">OK!</button>
+		</form>
+	</div>
+</div>
+
+<div class="modal" id="column-modal">
+	<div class="form">
+		<form id="column-form">
+			<input name="board-id" type="text">
+			<label for="column-name">Title:</label>
+			<input id="column-name" name="column-name" type="text" minlength="3" maxlength="15" required>
+			<button type="submit">OK!</button>
+		</form>
+	</div>
+</div>
+
+<div class="modal" id="card-modal">
+	<div class="form">
+		<form id="card-form">
+			<input id="column-id" name="column-id" type="text">
+			<label for="card-name">Name:</label>
+			<input id="card-name" name="card-name" type="text" minlength="3" maxlength="15" required>
+			<br>
+			<label for="card-description">Description:</label>
+			<input id="card-description" name="card-description" type="text" maxlength="60" required>
+			<button type="submit">OK!</button>
+		</form>
+	</div>
+</div>
+
+
+
+
 </html>

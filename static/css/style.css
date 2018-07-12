@@ -1,4 +1,4 @@
-.board h1 {
+.board h1, .card-name {
     display: inline;
 }
 
@@ -15,21 +15,21 @@
     display: flex;
     justify-content: flex-start;
     background: #ddd;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
 .column {
-    min-width: 150px;
+    min-width: 300px;
     flex: 0 1 auto;
     border-radius: 5px;
     margin: 5px;
-    padding-bottom: 0;
+    padding-bottom: 30px;
     padding-top: 0;
+    position: relative;
 }
 
 .column-header {
-    margin: 3px;
-    text-align: center;
+    margin: 10px;
     display: inline;
 }
 
@@ -39,20 +39,11 @@
     float: right;
 }
 
-.remove-column:hover {
-    background: #ddd;
-}
 
-.remove-card:hover {
+.remove-column:hover, .remove-card:hover {
     background: pink;
     border-top-right-radius: 5px;
 }
-
-.card-name {
-    display: inline;
-}
-
-
 
 .column:nth-child(2n+1) {
     background: #eee;
@@ -91,9 +82,10 @@
     background: #edd;
     border-radius: 5px;
     margin: 5px;
+
 }
 
-#column-template, #card-template {
+#column-template, #card-template, #board-template {
     display: none;
 }
 
@@ -101,6 +93,8 @@ button.add-card {
     border: 0;
     background: transparent;
     width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 button.add-card:hover {
