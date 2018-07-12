@@ -209,8 +209,8 @@
     function removeCardsFromColumn(columnId) {
         for (i = 0; i < cards.length; i++) {
             if (cards[i].columnId == columnId) {
-                removeCard(cards[i].id)
-                i--;
+                removeCard(cards[i].id);
+                i--;    //po usunięciu karty, następnik przyjmuje jej index w tablicy, należy więc cofnąć iterator
             }
         }
     }
@@ -243,6 +243,42 @@
     window.addEventListener("click", (event)=>{
         if (event.target.classList.contains('remove-column')) {
             removeColumn(event.target.dataset.id);
+        }
+    });
+
+
+    function removeColumnsFromBoard(boardId){
+        for (i = 0; i < columns.length; i++) {
+            if (columns[i].boardId == boardId) {
+                removeColumn(columns[i].id);
+                i--; //patrz removeCardsFromColumn
+            }
+        }
+    }
+
+    function removeBoard(id) {
+        for (i = 0; i < boards.length; i++) {
+            if (boards[i].id == id) {
+                //usuwamy wszystkie kolumny z tej tablicy
+                removeColumnsFromBoard(id);
+                //usuwamy tablicę z tablicy tablic XDDDDDD
+                boards.splice(i, 1);
+                //usuwamy id tablicy z listy zajętych id
+                let index = ids.indexOf(boards[i]);
+                ids.splice(index, 1);
+                //usuwamy element HTML
+                let brd = document.getElementById(id);
+                parent = brd.parentNode;
+                parent.removeChild(brd);
+                console.log("Board removed successfully! ID:", id);
+
+            }
+        }
+    }
+
+    window.addEventListener("click", (event)=>{
+        if (event.target.classList.contains('remove-board')) {
+            removeBoard(event.target.dataset.id);
         }
     });
 
