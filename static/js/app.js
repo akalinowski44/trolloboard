@@ -9,7 +9,6 @@
     const cardModal = document.getElementById("card-modal");
     const cardForm = document.getElementById("card-form");
 
-
     let initialState = {
         boards: [{id: 1, name: "Test Board"}],
         columns: [{id: 2, name: "To do", boardId: 1},
@@ -23,14 +22,12 @@
 
     let state = loadData();
 
-
     function cloneElement(id) {
         let template = document.getElementById(id);
         let element = template.cloneNode(true);
         element.removeAttribute("id");
         return element;
     }
-
 
     addBoardButton.addEventListener("click", ()=>{
         showBoardModal();
@@ -125,8 +122,6 @@
         columnName.value = "";
         columnModal.style.display = "none";
     });
-
-
 
     function addColumn(column) {
         
@@ -271,7 +266,6 @@
         }
     });
 
-
     function removeColumnsFromBoard(boardId){
         for (let i = 0; i < state.columns.length; i++) {
             if (state.columns[i].boardId == boardId) {
@@ -388,7 +382,5 @@
         updateDatabase(state);
         
     }
-
-    
 
 })();
