@@ -20,13 +20,25 @@
         ids: [0,1,2,3,4,5,6,7]
     }
 
-    let state = loadData();
+    let state = loadData('state');
 
     function cloneElement(id) {
         let template = document.getElementById(id);
         let element = template.cloneNode(true);
         element.removeAttribute("id");
         return element;
+    }
+
+    function generateId() {
+        if (state.ids) {
+            let last = state.ids[state.ids.length-1];
+            let newId = last + 1;
+            state.ids.push(newId);
+            return newId;
+        } else {
+            state.ids.push(1);
+            return 1;
+        }
     }
 
     addBoardButton.addEventListener("click", ()=>{
@@ -55,7 +67,6 @@
         state.boards.push(board);
         updateDatabase(state);
     });
-
 
     function addBoard(board) {
         let boardNode = cloneElement("board-template");
@@ -218,13 +229,6 @@
         }
     }
 
-    window.addEventListener("click", (event)=>{
-        if (event.target.classList.contains('remove-card')) {
-            
-            removeCard(event.target.dataset.id);
-        }
-    });
-
     function removeCardsFromColumn(columnId) {
         for (let i = 0; i < state.cards.length; i++) {
             if (state.cards[i].columnId == columnId) {
@@ -260,12 +264,6 @@
         }
     }
 
-    window.addEventListener("click", (event)=>{
-        if (event.target.classList.contains('remove-column')) {
-            removeColumn(event.target.dataset.id);
-        }
-    });
-
     function removeColumnsFromBoard(boardId){
         for (let i = 0; i < state.columns.length; i++) {
             if (state.columns[i].boardId == boardId) {
@@ -297,70 +295,27 @@
     }
 
     window.addEventListener("click", (event)=>{
+
+        //Handle remove buttons
         if (event.target.classList.contains('remove-board')) {
             removeBoard(event.target.dataset.id);
-        }
-    });    
-
-    window.addEventListener("click", (event)=>{
-        if (event.target == boardModal) {
+        } else if (event.target.classList.contains('remove-column')) {
+            removeColumn(event.target.dataset.id);
+        } else if (event.target.classList.contains('remove-card')) {
+            removeCard(event.target.dataset.id);
+        } 
+        //Hide modal window on misclick
+        else if (event.target == boardModal) {
             boardModal.style.display = "none";
         } else if (event.target == columnModal) {
             columnModal.style.display = "none";
         } else if (event.target == cardModal) {
             cardModal.style.display = "none";
         }
+    });    
 
-    });
+/****************Drag & Drop******************/
 
-    function generateId() {
-        if (state.ids) {
-            let last = state.ids[state.ids.length-1];
-            let newId = last + 1;
-            state.ids.push(newId);
-            return newId;
-        } else {
-            state.ids.push(1);
-            return 1;
-        }
-    }
-
-    function loadData() {
-
-        let state = getDatabase('state');
-
-        for (let board of state.boards) {
-            addBoard(board);
-        }
-
-        for (let column of state.columns) {
-            addColumn(column);
-        }
-        for (let card of state.cards) {
-            addCard(card);
-        }
-        return state;
-    }
-
-    function updateDatabase(state) {
-        localStorage.setItem('state', JSON.stringify(state));
-    }
-
-    function getDatabase(key) {
-        let state = localStorage.getItem(key);
-        return JSON.parse(state) || initialState;
-    }
-
-    
-    function changeCardOwner(cardId, columnId) {
-        for (let card of state.cards) {
-            if (card.id == cardId) {
-                card.columnId = columnId;
-            }
-
-        }
-    }
-    
     window.allowDrop = function(ev) {
         ev.preventDefault();
     }
@@ -381,6 +336,44 @@
         changeCardOwner(cardId, columnId); 
         updateDatabase(state);
         
+    }
+
+    function changeCardOwner(cardId, columnId) {
+        for (let card of state.cards) {
+            if (card.id == cardId) {
+                card.columnId = columnId;
+            }
+        }
+    }
+
+
+/****************DATA HANDLER*****************/
+
+
+    function updateDatabase(state) {
+        localStorage.setItem('state', JSON.stringify(state));
+    }
+
+    function getDatabase(key) {
+        let state = localStorage.getItem(key);
+        return JSON.parse(state) || initialState;
+    }
+
+    function loadData(key) {
+
+        let state = getDatabase(key);
+
+        for (let board of state.boards) {
+            addBoard(board);
+        }
+
+        for (let column of state.columns) {
+            addColumn(column);
+        }
+        for (let card of state.cards) {
+            addCard(card);
+        }
+        return state;
     }
 
 })();
