@@ -53,29 +53,32 @@
 
     boardForm.addEventListener("submit", ()=>{
         event.preventDefault();
-        let boardName = event.target.elements["board-name"].value;
 
+        let boardName = event.target.elements["board-name"].value;
         let id = generateId();
 
         let board = {
             id: id,
             name: boardName
         }
+
         addBoard(board);
-        boardName.value = "";
-        boardModal.style.display = "none";
         state.boards.push(board);
         updateDatabase(state);
+
+        boardName.value = "";
+        boardModal.style.display = "none";
+
     });
 
     function addBoard(board) {
         let boardNode = cloneElement("board-template");
-        
+        boardNode.setAttribute("id", board.id);
+    
         let boardHeader = boardNode.querySelector(".board-header");
         boardHeader.innerText = board.name;
 
         let addColumnButton = boardNode.querySelector(".add-column");
-
         let hideBoardButton = boardNode.querySelector(".hide-board");
 
         addColumnButton.addEventListener("click", ()=>{
@@ -86,8 +89,6 @@
             changeVisibility(board.id);
         });
         
-        boardNode.setAttribute("id", board.id);
-
         let button = boardNode.querySelector(".remove-board");
         button.setAttribute("data-id", board.id);
 
@@ -233,7 +234,8 @@
         for (let i = 0; i < state.cards.length; i++) {
             if (state.cards[i].columnId == columnId) {
                 removeCard(state.cards[i].id);
-                i--;    //po usunięciu karty, następnik przyjmuje jej index w tablicy, należy więc cofnąć iterator
+                i--;    //po usunięciu karty, następnik przyjmuje jej indeks w tablicy,
+                        //należy więc cofnąć iterator, aby sprawdzić ten element
             }
         }
     }
@@ -304,7 +306,7 @@
         } else if (event.target.classList.contains('remove-card')) {
             removeCard(event.target.dataset.id);
         } 
-        //Hide modal window on misclick
+        //Hide modal on click outside
         else if (event.target == boardModal) {
             boardModal.style.display = "none";
         } else if (event.target == columnModal) {
