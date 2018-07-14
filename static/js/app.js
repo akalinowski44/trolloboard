@@ -314,7 +314,7 @@
         } else if (event.target == cardModal) {
             cardModal.style.display = "none";
         }
-    });    
+    });
 
 /****************Drag & Drop******************/
 
